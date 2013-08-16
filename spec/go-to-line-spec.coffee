@@ -1,5 +1,5 @@
 RootView = require 'root-view'
-GoToLineView = require 'go-to-line/lib/go-to-line-view'
+GoToLineView = require '../lib/go-to-line-view'
 
 describe 'GoToLine', ->
   [goToLine, editor] = []
