@@ -1,4 +1,4 @@
-RootView = require 'root-view'
+{RootView} = require 'atom'
 GoToLineView = require '../lib/go-to-line-view'
 
 describe 'GoToLine', ->
