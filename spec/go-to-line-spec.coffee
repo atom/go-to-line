@@ -6,7 +6,7 @@ describe 'GoToLine', ->
 
   beforeEach ->
     window.rootView = new RootView
-    rootView.open('sample.js')
+    rootView.openSync('sample.js')
     rootView.enableKeymap()
     editor = rootView.getActiveView()
     goToLine = GoToLineView.activate()
