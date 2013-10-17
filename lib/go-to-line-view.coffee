@@ -14,7 +14,7 @@ class GoToLineView extends View
 
   initialize: ->
     rootView.command 'editor:go-to-line', '.editor', => @toggle()
-    @miniEditor.on 'focusout', => @detach() unless @detaching
+    @miniEditor.hiddenInput.on 'focusout', => @detach() unless @detaching
     @on 'core:confirm', => @confirm()
     @on 'core:cancel', => @detach()
 
