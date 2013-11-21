@@ -5,10 +5,10 @@ describe 'GoToLine', ->
   [goToLine, editor] = []
 
   beforeEach ->
-    window.rootView = new RootView
-    rootView.openSync('sample.js')
-    rootView.enableKeymap()
-    editor = rootView.getActiveView()
+    atom.rootView = new RootView
+    atom.rootView.openSync('sample.js')
+    atom.rootView.enableKeymap()
+    editor = atom.rootView.getActiveView()
     goToLine = GoToLineView.activate()
     editor.setCursorBufferPosition([1,0])
 
