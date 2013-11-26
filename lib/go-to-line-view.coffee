@@ -1,4 +1,4 @@
-{$, Editor, Point, View} = require 'atom'
+{$, EditorView, Point, View} = require 'atom'
 
 module.exports =
 class GoToLineView extends View
@@ -7,7 +7,7 @@ class GoToLineView extends View
 
   @content: ->
     @div class: 'go-to-line overlay from-top mini', =>
-      @subview 'miniEditor', new Editor(mini: true)
+      @subview 'miniEditor', new EditorView(mini: true)
       @div class: 'message', outlet: 'message'
 
   detaching: false
