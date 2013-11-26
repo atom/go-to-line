@@ -13,7 +13,7 @@ class GoToLineView extends View
   detaching: false
 
   initialize: ->
-    atom.rootView.command 'editor:go-to-line', '.editor', => @toggle()
+    atom.workspaceView.command 'editor:go-to-line', '.editor', => @toggle()
     @miniEditor.hiddenInput.on 'focusout', => @detach() unless @detaching
     @on 'core:confirm', => @confirm()
     @on 'core:cancel', => @detach()
@@ -36,7 +36,7 @@ class GoToLineView extends View
     if @previouslyFocusedElement?.isOnDom()
       @previouslyFocusedElement.focus()
     else
-      atom.rootView.focus()
+      atom.workspaceView.focus()
 
     super
 
@@ -44,7 +44,7 @@ class GoToLineView extends View
 
   confirm: ->
     lineNumber = @miniEditor.getText()
-    editor = atom.rootView.getActiveView()
+    editor = atom.workspaceView.getActiveView()
 
     @detach()
 
@@ -56,6 +56,6 @@ class GoToLineView extends View
 
   attach: ->
     @previouslyFocusedElement = $(':focus')
-    atom.rootView.append(this)
-    @message.text("Enter a line number 1-#{atom.rootView.getActiveView().getLineCount()}")
+    atom.workspaceView.append(this)
+    @message.text("Enter a line number 1-#{atom.workspaceView.getActiveView().getLineCount()}")
     @miniEditor.focus()

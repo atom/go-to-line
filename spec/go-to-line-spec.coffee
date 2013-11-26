@@ -1,14 +1,14 @@
-{RootView} = require 'atom'
+{WorkspaceView} = require 'atom'
 GoToLineView = require '../lib/go-to-line-view'
 
 describe 'GoToLine', ->
   [goToLine, editor] = []
 
   beforeEach ->
-    atom.rootView = new RootView
-    atom.rootView.openSync('sample.js')
-    atom.rootView.enableKeymap()
-    editor = atom.rootView.getActiveView()
+    atom.workspaceView = new WorkspaceView
+    atom.workspaceView.openSync('sample.js')
+    atom.workspaceView.enableKeymap()
+    editor = atom.workspaceView.getActiveView()
     goToLine = GoToLineView.activate()
     editor.setCursorBufferPosition([1,0])
 
