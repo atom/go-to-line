@@ -31,15 +31,12 @@ class GoToLineView extends View
     return unless @hasParent()
 
     @detaching = true
+    miniEditorFocused = @miniEditor.isFocused
     @miniEditor.setText('')
-
-    if @previouslyFocusedElement?.isOnDom()
-      @previouslyFocusedElement.focus()
-    else
-      atom.workspaceView.focus()
 
     super
 
+    @restoreFocus() if miniEditorFocused
     @detaching = false
 
   confirm: ->
@@ -54,8 +51,17 @@ class GoToLineView extends View
     editor.setCursorBufferPosition(position)
     editor.moveCursorToFirstCharacterOfLine()
 
-  attach: ->
+  storeFocusedElement: ->
     @previouslyFocusedElement = $(':focus')
+
+  restoreFocus: ->
+    if @previouslyFocusedElement?.isOnDom()
+      @previouslyFocusedElement.focus()
+    else
+      atom.workspaceView.focus()
+
+  attach: ->
+    @storeFocusedElement()
     atom.workspaceView.append(this)
     @message.text("Enter a line number 1-#{atom.workspaceView.getActiveView().getLineCount()}")
     @miniEditor.focus()
