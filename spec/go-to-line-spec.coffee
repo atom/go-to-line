@@ -2,20 +2,21 @@
 GoToLineView = require '../lib/go-to-line-view'
 
 describe 'GoToLine', ->
-  [goToLine, editor] = []
+  [goToLine, editor, editorView] = []
 
   beforeEach ->
     atom.workspaceView = new WorkspaceView
     atom.workspaceView.openSync('sample.js')
     atom.workspaceView.enableKeymap()
-    editor = atom.workspaceView.getActiveView()
+    editorView = atom.workspaceView.getActiveView()
+    {editor} = editorView
     goToLine = GoToLineView.activate()
     editor.setCursorBufferPosition([1,0])
 
   describe "when editor:go-to-line is triggered", ->
     it "attaches to the root view", ->
       expect(goToLine.hasParent()).toBeFalsy()
-      editor.trigger 'editor:go-to-line'
+      editorView.trigger 'editor:go-to-line'
       expect(goToLine.hasParent()).toBeTruthy()
 
   describe "when entering a line number", ->
@@ -35,7 +36,7 @@ describe 'GoToLine', ->
 
     describe "when no line number has been entered", ->
       it "closes the view and does not update the cursor position", ->
-        editor.trigger 'editor:go-to-line'
+        editorView.trigger 'editor:go-to-line'
         expect(goToLine.hasParent()).toBeTruthy()
         goToLine.miniEditor.trigger 'core:confirm'
         expect(goToLine.hasParent()).toBeFalsy()
@@ -43,7 +44,7 @@ describe 'GoToLine', ->
 
   describe "when core:cancel is triggered", ->
     it "closes the view and does not update the cursor position", ->
-      editor.trigger 'editor:go-to-line'
+      editorView.trigger 'editor:go-to-line'
       expect(goToLine.hasParent()).toBeTruthy()
       goToLine.miniEditor.trigger 'core:cancel'
       expect(goToLine.hasParent()).toBeFalsy()

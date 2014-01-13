@@ -41,15 +41,15 @@ class GoToLineView extends View
 
   confirm: ->
     lineNumber = @miniEditor.getText()
-    editor = atom.workspaceView.getActiveView()
+    editorView = atom.workspaceView.getActiveView()
 
     @detach()
 
-    return unless editor and lineNumber.length
+    return unless editorView? and lineNumber.length
     position = new Point(parseInt(lineNumber - 1))
-    editor.scrollToBufferPosition(position, center: true)
-    editor.setCursorBufferPosition(position)
-    editor.moveCursorToFirstCharacterOfLine()
+    editorView.scrollToBufferPosition(position, center: true)
+    editorView.editor.setCursorBufferPosition(position)
+    editorView.editor.moveCursorToFirstCharacterOfLine()
 
   storeFocusedElement: ->
     @previouslyFocusedElement = $(':focus')
@@ -63,5 +63,5 @@ class GoToLineView extends View
   attach: ->
     @storeFocusedElement()
     atom.workspaceView.append(this)
-    @message.text("Enter a line number 1-#{atom.workspaceView.getActiveView().getLineCount()}")
+    @message.text("Enter a line number 1-#{atom.workspaceView.getActivePaneItem().getLineCount()}")
     @miniEditor.focus()
