@@ -1,8 +1,8 @@
 '.platform-darwin':
-  'ctrl-g': 'editor:go-to-line'
+  'ctrl-g': 'go-to-line:toggle'
 
 '.platform-win32':
-  'ctrl-g': 'editor:go-to-line'
+  'ctrl-g': 'go-to-line:toggle'
 
 '.go-to-line .mini.editor input':
   'enter': 'core:confirm',

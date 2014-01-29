@@ -2,6 +2,6 @@
   'label': 'Edit'
   'submenu': [
     'label': 'Go to Line'
-    'command': 'editor:go-to-line'
+    'command': 'go-to-line:toggle'
   ]
 ]

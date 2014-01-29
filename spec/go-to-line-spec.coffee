@@ -13,10 +13,10 @@ describe 'GoToLine', ->
     goToLine = GoToLineView.activate()
     editor.setCursorBufferPosition([1,0])
 
-  describe "when editor:go-to-line is triggered", ->
+  describe "when go-to-line:toggle is triggered", ->
     it "attaches to the root view", ->
       expect(goToLine.hasParent()).toBeFalsy()
-      editorView.trigger 'editor:go-to-line'
+      editorView.trigger 'go-to-line:toggle'
       expect(goToLine.hasParent()).toBeTruthy()
 
   describe "when entering a line number", ->
@@ -36,7 +36,7 @@ describe 'GoToLine', ->
 
     describe "when no line number has been entered", ->
       it "closes the view and does not update the cursor position", ->
-        editorView.trigger 'editor:go-to-line'
+        editorView.trigger 'go-to-line:toggle'
         expect(goToLine.hasParent()).toBeTruthy()
         goToLine.miniEditor.trigger 'core:confirm'
         expect(goToLine.hasParent()).toBeFalsy()
@@ -44,7 +44,7 @@ describe 'GoToLine', ->
 
   describe "when core:cancel is triggered", ->
     it "closes the view and does not update the cursor position", ->
-      editorView.trigger 'editor:go-to-line'
+      editorView.trigger 'go-to-line:toggle'
       expect(goToLine.hasParent()).toBeTruthy()
       goToLine.miniEditor.trigger 'core:cancel'
       expect(goToLine.hasParent()).toBeFalsy()
