@@ -3,6 +3,7 @@
   "version": "0.16.0",
   "main": "./lib/go-to-line-view",
   "description": "Jump to a specific editor line number with `ctrl-g`.",
+  "license": "MIT",
   "activationEvents": {
     "go-to-line:toggle": ".editor"
   },
