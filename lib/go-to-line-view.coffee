@@ -2,7 +2,6 @@
 
 module.exports =
 class GoToLineView extends View
-
   @activate: -> new GoToLineView
 
   @content: ->
