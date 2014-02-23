@@ -1,3 +1,5 @@
-# Go to line package
+# Go To Line package
 
-`meta-l` to jump to a specific line in the editor.
+Move the cursor to a specific line in the editor using `ctrl-g`.
+
+![](https://f.cloud.github.com/assets/671378/2241602/fdd88c4c-9cd8-11e3-9d14-74844ec7da01.png)
