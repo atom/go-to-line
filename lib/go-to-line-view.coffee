@@ -60,7 +60,8 @@ class GoToLineView extends View
       atom.workspaceView.focus()
 
   attach: ->
-    @storeFocusedElement()
-    atom.workspaceView.append(this)
-    @message.text("Enter a line number 1-#{atom.workspaceView.getActivePaneItem().getLineCount()}")
-    @miniEditor.focus()
+    if editor = atom.workspace.getActiveEditor()
+      @storeFocusedElement()
+      atom.workspaceView.append(this)
+      @message.text("Enter a line number 1-#{editor.getLineCount()}")
+      @miniEditor.focus()
