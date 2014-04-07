@@ -4,6 +4,9 @@
 '.platform-win32':
   'ctrl-g': 'go-to-line:toggle'
 
+'.platform-linux':
+  'ctrl-i': 'go-to-line:toggle'
+
 '.go-to-line .mini.editor input':
   'enter': 'core:confirm',
   'escape': 'core:cancel'
@@ -12,4 +15,7 @@
   'cmd-w': 'core:cancel'
 
 '.platform-win32 .go-to-line .mini.editor input':
+  'ctrl-w': 'core:cancel'
+
+'.platform-linux .go-to-line .mini.editor input':
   'ctrl-w': 'core:cancel'
