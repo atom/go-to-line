@@ -1,4 +1,4 @@
-# Go To Line package
+# Go To Line package [![Build Status](https://travis-ci.org/atom/go-to-line.svg?branch=master)](https://travis-ci.org/atom/go-to-line)
 
 Move the cursor to a specific line in the editor using `ctrl-g`.
 
