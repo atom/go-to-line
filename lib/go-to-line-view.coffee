@@ -12,7 +12,10 @@ class GoToLineView extends View
   detaching: false
 
   initialize: ->
-    atom.workspaceView.command 'go-to-line:toggle', '.editor', => @toggle()
+    atom.workspaceView.command 'go-to-line:toggle', '.editor', =>
+      @toggle()
+      false
+
     @miniEditor.hiddenInput.on 'focusout', => @detach() unless @detaching
     @on 'core:confirm', => @confirm()
     @on 'core:cancel', => @detach()
