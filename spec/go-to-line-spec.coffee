@@ -7,12 +7,16 @@ describe 'GoToLine', ->
   beforeEach ->
     atom.workspaceView = new WorkspaceView
     atom.workspace = atom.workspaceView.model
-    atom.workspaceView.openSync('sample.js')
-    atom.workspaceView.enableKeymap()
-    editorView = atom.workspaceView.getActiveView()
-    {editor} = editorView
-    goToLine = GoToLineView.activate()
-    editor.setCursorBufferPosition([1,0])
+
+    waitsForPromise ->
+      atom.workspace.open('sample.js')
+
+    runs ->
+      atom.workspaceView.enableKeymap()
+      editorView = atom.workspaceView.getActiveView()
+      {editor} = editorView
+      goToLine = GoToLineView.activate()
+      editor.setCursorBufferPosition([1,0])
 
   describe "when go-to-line:toggle is triggered", ->
     it "attaches to the root view", ->
