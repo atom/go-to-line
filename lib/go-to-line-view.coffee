@@ -20,8 +20,8 @@ class GoToLineView extends View
     @on 'core:confirm', => @confirm()
     @on 'core:cancel', => @detach()
 
-    @miniEditor.preempt 'textInput', (e) =>
-      false unless e.originalEvent.data.match(/[0-9]/)
+    @miniEditor.getModel().on 'will-insert-text', ({cancel, text}) =>
+      cancel() unless text.match(/[0-9]/)
 
   toggle: ->
     if @hasParent()

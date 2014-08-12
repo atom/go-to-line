@@ -27,15 +27,15 @@ describe 'GoToLine', ->
   describe "when entering a line number", ->
     it "only allows 0-9 to be entered in the mini editor", ->
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.textInput 'a'
+      goToLine.miniEditor.getModel().insertText 'a'
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.textInput '40'
-      expect(goToLine.miniEditor.getText()).toBe '40'
+      goToLine.miniEditor.getModel().insertText '4'
+      expect(goToLine.miniEditor.getText()).toBe '4'
 
   describe "when core:confirm is triggered", ->
     describe "when a line number has been entered", ->
       it "moves the cursor to the first character of the line", ->
-        goToLine.miniEditor.textInput '3'
+        goToLine.miniEditor.getModel().insertText '3'
         goToLine.miniEditor.trigger 'core:confirm'
         expect(editor.getCursorBufferPosition()).toEqual [2, 4]
 
