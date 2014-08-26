@@ -35,7 +35,6 @@ class GoToLineView extends View
     @detaching = true
     miniEditorFocused = @miniEditor.isFocused
     @miniEditor.setText('')
-    @miniEditor.updateDisplay()
 
     super
 
