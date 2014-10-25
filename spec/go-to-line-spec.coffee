@@ -25,12 +25,42 @@ describe 'GoToLine', ->
       expect(goToLine.hasParent()).toBeTruthy()
 
   describe "when entering a line number", ->
-    it "only allows 0-9 to be entered in the mini editor", ->
+    it "only allows 0-9 and the colon character to be entered in the mini editor", ->
       expect(goToLine.miniEditor.getText()).toBe ''
       goToLine.miniEditor.getModel().insertText 'a'
       expect(goToLine.miniEditor.getText()).toBe ''
+      goToLine.miniEditor.getModel().insertText ':'
+      expect(goToLine.miniEditor.getText()).toBe ':'
+      goToLine.miniEditor.getModel().setText ''
       goToLine.miniEditor.getModel().insertText '4'
       expect(goToLine.miniEditor.getText()).toBe '4'
+
+  describe "when entering a line number and column number", ->
+    it "moves the cursor to the column number of the line specified", ->
+      expect(goToLine.miniEditor.getText()).toBe ''
+      goToLine.miniEditor.getModel().insertText '3:14'
+      goToLine.miniEditor.trigger 'core:confirm'
+      expect(editor.getCursorBufferPosition()).toEqual [2, 13]
+
+  describe "when entering a line number greater than the number in the buffer", ->
+    it "moves the cursor position to the first character of the last line", ->
+      editorView.trigger 'go-to-line:toggle'
+      expect(goToLine.hasParent()).toBeTruthy()
+      expect(goToLine.miniEditor.getText()).toBe ''
+      goToLine.miniEditor.getModel().insertText '14'
+      goToLine.miniEditor.trigger 'core:confirm'
+      expect(goToLine.hasParent()).toBeFalsy()
+      expect(editor.getCursorBufferPosition()).toEqual [12, 0]
+
+  describe "when entering a column number greater than the number in the specified line", ->
+    it "moves the cursor position to the last character of the specified line", ->
+      editorView.trigger 'go-to-line:toggle'
+      expect(goToLine.hasParent()).toBeTruthy()
+      expect(goToLine.miniEditor.getText()).toBe ''
+      goToLine.miniEditor.getModel().insertText '3:43'
+      goToLine.miniEditor.trigger 'core:confirm'
+      expect(goToLine.hasParent()).toBeFalsy()
+      expect(editor.getCursorBufferPosition()).toEqual [2, 40]
 
   describe "when core:confirm is triggered", ->
     describe "when a line number has been entered", ->
@@ -39,13 +69,28 @@ describe 'GoToLine', ->
         goToLine.miniEditor.trigger 'core:confirm'
         expect(editor.getCursorBufferPosition()).toEqual [2, 4]
 
-    describe "when no line number has been entered", ->
-      it "closes the view and does not update the cursor position", ->
-        editorView.trigger 'go-to-line:toggle'
-        expect(goToLine.hasParent()).toBeTruthy()
-        goToLine.miniEditor.trigger 'core:confirm'
-        expect(goToLine.hasParent()).toBeFalsy()
-        expect(editor.getCursorBufferPosition()).toEqual [1, 0]
+  describe "when no line number has been entered", ->
+    it "closes the view and does not update the cursor position", ->
+      editorView.trigger 'go-to-line:toggle'
+      expect(goToLine.hasParent()).toBeTruthy()
+      goToLine.miniEditor.trigger 'core:confirm'
+      expect(goToLine.hasParent()).toBeFalsy()
+      expect(editor.getCursorBufferPosition()).toEqual [1, 0]
+
+  describe "when no line number has been entered, but a column number has been entered", ->
+    it "navigates to the column of the current line", ->
+      editorView.trigger 'go-to-line:toggle'
+      expect(goToLine.hasParent()).toBeTruthy()
+      goToLine.miniEditor.getModel().insertText '4:1'
+      goToLine.miniEditor.trigger 'core:confirm'
+      expect(goToLine.hasParent()).toBeFalsy()
+      expect(editor.getCursorBufferPosition()).toEqual [3, 0]
+      editorView.trigger 'go-to-line:toggle'
+      expect(goToLine.hasParent()).toBeTruthy()
+      goToLine.miniEditor.getModel().insertText ':19'
+      goToLine.miniEditor.trigger 'core:confirm'
+      expect(goToLine.hasParent()).toBeFalsy()
+      expect(editor.getCursorBufferPosition()).toEqual [3, 18]
 
   describe "when core:cancel is triggered", ->
     it "closes the view and does not update the cursor position", ->
