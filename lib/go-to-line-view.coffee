@@ -21,7 +21,7 @@ class GoToLineView extends View
     @on 'core:cancel', => @detach()
 
     @miniEditor.getModel().on 'will-insert-text', ({cancel, text}) =>
-      cancel() unless text.match(/[0-9]|\:/)
+      cancel() unless text.match(/[0-9]|:/)
 
   toggle: ->
     if @hasParent()
@@ -49,9 +49,9 @@ class GoToLineView extends View
 
     return unless editorView? and lineNumber.length
 
-    currentLineNum = editorView.getModel().getCursorBufferPosition().toArray()[0]
+    currentLineNum = editorView.getModel().getCursorBufferPosition().row
     lineAndCol = lineNumber.split(':')
-    if lineAndCol[0] and lineAndCol[0].length > 0
+    if lineAndCol[0]?.length > 0
       # Line number was specified
       lineNum = parseInt(lineAndCol[0]) - 1
     else
@@ -59,7 +59,7 @@ class GoToLineView extends View
       # as where the cursor currently is (no change)
       lineNum = currentLineNum
 
-    if lineAndCol[1] and lineAndCol[1].length > 0
+    if lineAndCol[1]?.length > 0
       # Column number was specified
       colNum = parseInt(lineAndCol[1]) - 1
     else
