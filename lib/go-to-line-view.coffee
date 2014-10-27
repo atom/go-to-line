@@ -87,5 +87,5 @@ class GoToLineView extends View
     if editor = atom.workspace.getActiveEditor()
       @storeFocusedElement()
       atom.workspaceView.append(this)
-      @message.text("Enter a row:column to go to")
+      @message.text("Enter a line row:column to go to")
       @miniEditor.focus()
