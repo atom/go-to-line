@@ -49,29 +49,29 @@ class GoToLineView extends View
 
     return unless editorView? and lineNumber.length
 
-    currentLineNum = editorView.getModel().getCursorBufferPosition().row
-    lineAndCol = lineNumber.split(':')
-    if lineAndCol[0]?.length > 0
+    currentRow = editorView.getModel().getCursorBufferPosition().row
+    [row, column] = lineNumber.split(':')
+    if row?.length > 0
       # Line number was specified
-      lineNum = parseInt(lineAndCol[0]) - 1
+      row = parseInt(row) - 1
     else
       # Line number was not specified, so assume we will be at the same line
       # as where the cursor currently is (no change)
-      lineNum = currentLineNum
+      row = currentRow
 
-    if lineAndCol[1]?.length > 0
+    if column?.length > 0
       # Column number was specified
-      colNum = parseInt(lineAndCol[1]) - 1
+      column = parseInt(column) - 1
     else
       # Column number was not specified, so if the line number was specified,
       # then we should assume that we're navigating to the first character
       # of the specified line.
-      colNum = -1
+      column = -1
 
-    linePos = new Point(lineNum, colNum)
-    editorView.scrollToBufferPosition(linePos, center: true)
-    editorView.editor.setCursorBufferPosition(linePos)
-    if colNum < 0
+    position = new Point(row, column)
+    editorView.scrollToBufferPosition(position, center: true)
+    editorView.editor.setCursorBufferPosition(position)
+    if column < 0
       editorView.editor.moveCursorToFirstCharacterOfLine()
 
   storeFocusedElement: ->
