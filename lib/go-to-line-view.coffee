@@ -50,7 +50,7 @@ class GoToLineView extends View
     return unless editorView? and lineNumber.length
 
     currentRow = editorView.getModel().getCursorBufferPosition().row
-    [row, column] = lineNumber.split(':')
+    [row, column] = lineNumber.split(/:+/)
     if row?.length > 0
       # Line number was specified
       row = parseInt(row) - 1
