@@ -21,7 +21,7 @@ class GoToLineView extends View
     @on 'core:cancel', => @detach()
 
     @miniEditor.getModel().on 'will-insert-text', ({cancel, text}) =>
-      cancel() unless text.match(/[0-9]/)
+      cancel() unless text.match(/[0-9]|:/)
 
   toggle: ->
     if @hasParent()
@@ -48,10 +48,31 @@ class GoToLineView extends View
     @detach()
 
     return unless editorView? and lineNumber.length
-    position = new Point(parseInt(lineNumber - 1))
-    editorView.scrollToBufferPosition(position, center: true)
-    editorView.editor.setCursorBufferPosition(position)
-    editorView.editor.moveCursorToFirstCharacterOfLine()
+
+    currentLineNum = editorView.getModel().getCursorBufferPosition().row
+    lineAndCol = lineNumber.split(':')
+    if lineAndCol[0]?.length > 0
+      # Line number was specified
+      lineNum = parseInt(lineAndCol[0]) - 1
+    else
+      # Line number was not specified, so assume we will be at the same line
+      # as where the cursor currently is (no change)
+      lineNum = currentLineNum
+
+    if lineAndCol[1]?.length > 0
+      # Column number was specified
+      colNum = parseInt(lineAndCol[1]) - 1
+    else
+      # Column number was not specified, so if the line number was specified,
+      # then we should assume that we're navigating to the first character
+      # of the specified line.
+      colNum = -1
+
+    linePos = new Point(lineNum, colNum)
+    editorView.scrollToBufferPosition(linePos, center: true)
+    editorView.editor.setCursorBufferPosition(linePos)
+    if colNum < 0
+      editorView.editor.moveCursorToFirstCharacterOfLine()
 
   storeFocusedElement: ->
     @previouslyFocusedElement = $(':focus')
@@ -66,5 +87,5 @@ class GoToLineView extends View
     if editor = atom.workspace.getActiveEditor()
       @storeFocusedElement()
       atom.workspaceView.append(this)
-      @message.text("Enter a line number 1-#{editor.getLineCount()}")
+      @message.text("Enter a line number 1-#{editor.getLineCount()} and column number")
       @miniEditor.focus()
