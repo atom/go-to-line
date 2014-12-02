@@ -5,47 +5,43 @@ class GoToLineView extends View
   @activate: -> new GoToLineView
 
   @content: ->
-    @div class: 'go-to-line overlay from-top mini', =>
+    @div class: 'go-to-line', =>
       @subview 'miniEditor', new EditorView(mini: true)
       @div class: 'message', outlet: 'message'
 
-  detaching: false
-
   initialize: ->
+    @panel = atom.workspace.addModalPanel(item: this, visible: false)
+
     atom.commands.add 'atom-text-editor', 'go-to-line:toggle', =>
       @toggle()
       false
 
-    @miniEditor.hiddenInput.on 'focusout', => @detach() unless @detaching
+    @miniEditor.hiddenInput.on 'focusout', => @close()
     @on 'core:confirm', => @confirm()
-    @on 'core:cancel', => @detach()
+    @on 'core:cancel', => @close()
 
     @miniEditor.getModel().on 'will-insert-text', ({cancel, text}) =>
       cancel() unless text.match(/[0-9:]/)
 
   toggle: ->
-    if @hasParent()
-      @detach()
+    if @panel.isVisible()
+      @close()
     else
-      @attach()
+      @open()
 
-  detach: ->
-    return unless @hasParent()
+  close: ->
+    return unless @panel.isVisible()
 
-    @detaching = true
     miniEditorFocused = @miniEditor.isFocused
     @miniEditor.setText('')
-
-    super
-
+    @panel.hide()
     @restoreFocus() if miniEditorFocused
-    @detaching = false
 
   confirm: ->
     lineNumber = @miniEditor.getText()
     editor = atom.workspace.getActiveTextEditor()
 
-    @detach()
+    @close()
 
     return unless editor? and lineNumber.length
 
@@ -81,11 +77,13 @@ class GoToLineView extends View
     if @previouslyFocusedElement?.isOnDom()
       @previouslyFocusedElement.focus()
     else
-      atom.workspaceView.focus()
+      atom.views.getView(atom.workspace).focus()
 
-  attach: ->
+  open: ->
+    return if @panel.isVisible()
+
     if editor = atom.workspace.getActiveEditor()
       @storeFocusedElement()
-      atom.workspaceView.append(this)
+      @panel.show()
       @message.text("Enter a line row:column to go to")
       @miniEditor.focus()
