@@ -21,7 +21,7 @@ class GoToLineView extends View
     atom.commands.add @miniEditor, 'core:confirm', => @confirm()
     atom.commands.add @miniEditor, 'core:cancel', => @close()
 
-    @miniEditor.getModel().on 'will-insert-text', ({cancel, text}) =>
+    @miniEditor.getModel().onWillInsertText ({cancel, text}) =>
       cancel() unless text.match(/[0-9:]/)
 
   toggle: ->
@@ -69,7 +69,7 @@ class GoToLineView extends View
     editor.scrollToBufferPosition(position, center: true)
     editor.setCursorBufferPosition(position)
     if column < 0
-      editor.moveCursorToFirstCharacterOfLine()
+      editor.moveToFirstCharacterOfLine()
 
   storeFocusedElement: ->
     @previouslyFocusedElement = $(':focus')
@@ -83,7 +83,7 @@ class GoToLineView extends View
   open: ->
     return if @panel.isVisible()
 
-    if editor = atom.workspace.getActiveEditor()
+    if editor = atom.workspace.getActiveTextEditor()
       @storeFocusedElement()
       @panel.show()
       @message.text("Enter a line row:column to go to")
