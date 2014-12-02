@@ -5,7 +5,7 @@
   "description": "Jump to a specific editor line number with `ctrl-g`.",
   "license": "MIT",
   "activationEvents": {
-    "go-to-line:toggle": ".editor"
+    "go-to-line:toggle": "atom-text-editor"
   },
   "repository": "https://github.com/atom/go-to-line",
   "dependencies": {
