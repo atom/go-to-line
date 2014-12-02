@@ -12,7 +12,7 @@ class GoToLineView extends View
   detaching: false
 
   initialize: ->
-    atom.workspaceView.command 'go-to-line:toggle', '.editor', =>
+    atom.commands.add 'atom-text-editor', 'go-to-line:toggle', =>
       @toggle()
       false
 
