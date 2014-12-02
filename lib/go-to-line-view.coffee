@@ -43,13 +43,13 @@ class GoToLineView extends View
 
   confirm: ->
     lineNumber = @miniEditor.getText()
-    editorView = atom.workspaceView.getActiveView()
+    editor = atom.workspace.getActiveTextEditor()
 
     @detach()
 
-    return unless editorView? and lineNumber.length
+    return unless editor? and lineNumber.length
 
-    currentRow = editorView.getModel().getCursorBufferPosition().row
+    currentRow = editor.getCursorBufferPosition().row
     [row, column] = lineNumber.split(/:+/)
     if row?.length > 0
       # Line number was specified
@@ -69,10 +69,10 @@ class GoToLineView extends View
       column = -1
 
     position = new Point(row, column)
-    editorView.scrollToBufferPosition(position, center: true)
-    editorView.editor.setCursorBufferPosition(position)
+    editor.scrollToBufferPosition(position, center: true)
+    editor.setCursorBufferPosition(position)
     if column < 0
-      editorView.editor.moveCursorToFirstCharacterOfLine()
+      editor.moveCursorToFirstCharacterOfLine()
 
   storeFocusedElement: ->
     @previouslyFocusedElement = $(':focus')
