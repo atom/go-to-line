@@ -1,4 +1,5 @@
-{$, EditorView, Point, View} = require 'atom'
+{Point} = require 'atom'
+{$, TextEditorView, View}  = require 'atom-space-pen-views'
 
 module.exports =
 class GoToLineView extends View
@@ -6,7 +7,7 @@ class GoToLineView extends View
 
   @content: ->
     @div class: 'go-to-line', =>
-      @subview 'miniEditor', new EditorView(mini: true)
+      @subview 'miniEditor', new TextEditorView(mini: true)
       @div class: 'message', outlet: 'message'
 
   initialize: ->
@@ -16,9 +17,9 @@ class GoToLineView extends View
       @toggle()
       false
 
-    @miniEditor.hiddenInput.on 'focusout', => @close()
-    @on 'core:confirm', => @confirm()
-    @on 'core:cancel', => @close()
+    @miniEditor.on 'blur', => @close()
+    atom.commands.add @miniEditor, 'core:confirm', => @confirm()
+    atom.commands.add @miniEditor, 'core:cancel', => @close()
 
     @miniEditor.getModel().on 'will-insert-text', ({cancel, text}) =>
       cancel() unless text.match(/[0-9:]/)
@@ -32,7 +33,7 @@ class GoToLineView extends View
   close: ->
     return unless @panel.isVisible()
 
-    miniEditorFocused = @miniEditor.isFocused
+    miniEditorFocused = @miniEditor.hasFocus()
     @miniEditor.setText('')
     @panel.hide()
     @restoreFocus() if miniEditorFocused

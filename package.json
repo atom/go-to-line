@@ -8,6 +8,9 @@
     "go-to-line:toggle": ".editor"
   },
   "repository": "https://github.com/atom/go-to-line",
+  "dependencies": {
+    "atom-space-pen-views": "^0.20.0"
+  },
   "engines": {
     "atom": "*"
   }
