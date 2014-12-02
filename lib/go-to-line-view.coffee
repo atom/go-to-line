@@ -18,8 +18,8 @@ class GoToLineView extends View
       false
 
     @miniEditor.on 'blur', => @close()
-    atom.commands.add @miniEditor, 'core:confirm', => @confirm()
-    atom.commands.add @miniEditor, 'core:cancel', => @close()
+    atom.commands.add @miniEditor.element, 'core:confirm', => @confirm()
+    atom.commands.add @miniEditor.element, 'core:cancel', => @close()
 
     @miniEditor.getModel().onWillInsertText ({cancel, text}) =>
       cancel() unless text.match(/[0-9:]/)

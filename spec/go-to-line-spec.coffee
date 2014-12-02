@@ -34,7 +34,7 @@ describe 'GoToLine', ->
     it "moves the cursor to the column number of the line specified", ->
       expect(goToLine.miniEditor.getText()).toBe ''
       goToLine.miniEditor.getModel().insertText '3:14'
-      atom.commands.dispatch(goToLine.miniEditor, 'core:confirm')
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(editor.getCursorBufferPosition()).toEqual [2, 13]
 
   describe "when entering a line number greater than the number in the buffer", ->
@@ -43,7 +43,7 @@ describe 'GoToLine', ->
       expect(goToLine.panel.isVisible()).toBeTruthy()
       expect(goToLine.miniEditor.getText()).toBe ''
       goToLine.miniEditor.getModel().insertText '14'
-      atom.commands.dispatch(goToLine.miniEditor, 'core:confirm')
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [12, 0]
 
@@ -53,7 +53,7 @@ describe 'GoToLine', ->
       expect(goToLine.panel.isVisible()).toBeTruthy()
       expect(goToLine.miniEditor.getText()).toBe ''
       goToLine.miniEditor.getModel().insertText '3:43'
-      atom.commands.dispatch(goToLine.miniEditor, 'core:confirm')
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [2, 40]
 
@@ -61,14 +61,14 @@ describe 'GoToLine', ->
     describe "when a line number has been entered", ->
       it "moves the cursor to the first character of the line", ->
         goToLine.miniEditor.getModel().insertText '3'
-        atom.commands.dispatch(goToLine.miniEditor, 'core:confirm')
+        atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
         expect(editor.getCursorBufferPosition()).toEqual [2, 4]
 
   describe "when no line number has been entered", ->
     it "closes the view and does not update the cursor position", ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
-      atom.commands.dispatch(goToLine.miniEditor, 'core:confirm')
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [1, 0]
 
@@ -77,13 +77,13 @@ describe 'GoToLine', ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
       goToLine.miniEditor.getModel().insertText '4:1'
-      atom.commands.dispatch(goToLine.miniEditor, 'core:confirm')
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [3, 0]
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
       goToLine.miniEditor.getModel().insertText ':19'
-      atom.commands.dispatch(goToLine.miniEditor, 'core:confirm')
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [3, 18]
 
@@ -91,6 +91,6 @@ describe 'GoToLine', ->
     it "closes the view and does not update the cursor position", ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
-      atom.commands.dispatch(goToLine.miniEditor, 'core:cancel')
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:cancel')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [1, 0]
