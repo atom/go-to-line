@@ -1,11 +1,13 @@
 {
   "name": "go-to-line",
-  "version": "0.26.0",
+  "version": "0.27.0",
   "main": "./lib/go-to-line-view",
   "description": "Jump to a specific editor line number with `ctrl-g`.",
   "license": "MIT",
   "activationCommands": {
-    "atom-text-editor": ["go-to-line:toggle"]
+    "atom-text-editor": [
+      "go-to-line:toggle"
+    ]
   },
   "repository": "https://github.com/atom/go-to-line",
   "dependencies": {
