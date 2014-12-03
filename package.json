@@ -4,10 +4,13 @@
   "main": "./lib/go-to-line-view",
   "description": "Jump to a specific editor line number with `ctrl-g`.",
   "license": "MIT",
-  "activationEvents": {
-    "go-to-line:toggle": ".editor"
+  "activationCommands": {
+    "atom-text-editor": ["go-to-line:toggle"]
   },
   "repository": "https://github.com/atom/go-to-line",
+  "dependencies": {
+    "atom-space-pen-views": "^0.20.0"
+  },
   "engines": {
     "atom": "*"
   }
