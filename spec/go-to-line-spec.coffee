@@ -11,7 +11,7 @@ describe 'GoToLine', ->
       editor = atom.workspace.getActiveTextEditor()
       editorView = atom.views.getView(editor)
       goToLine = GoToLineView.activate()
-      editor.setCursorBufferPosition([1,0])
+      editor.setCursorBufferPosition([1, 0])
 
   describe "when go-to-line:toggle is triggered", ->
     it "adds a modal panel", ->

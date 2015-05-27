@@ -21,7 +21,7 @@ class GoToLineView extends View
     atom.commands.add @miniEditor.element, 'core:confirm', => @confirm()
     atom.commands.add @miniEditor.element, 'core:cancel', => @close()
 
-    @miniEditor.getModel().onWillInsertText ({cancel, text}) =>
+    @miniEditor.getModel().onWillInsertText ({cancel, text}) ->
       cancel() unless text.match(/[0-9:]/)
 
   toggle: ->
