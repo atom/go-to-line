@@ -8,6 +8,11 @@ describe 'GoToLine', ->
       atom.workspace.open('sample.js')
 
     runs ->
+      workspaceElement = atom.views.getView(atom.workspace)
+      workspaceElement.style.height = "200px"
+      workspaceElement.style.widht = "1000px"
+      jasmine.attachToDOM(workspaceElement)
+
       editor = atom.workspace.getActiveTextEditor()
       editorView = atom.views.getView(editor)
       goToLine = GoToLineView.activate()
@@ -37,15 +42,25 @@ describe 'GoToLine', ->
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(editor.getCursorBufferPosition()).toEqual [2, 13]
 
-  describe "when entering a line number greater than the number in the buffer", ->
+    it "centers the selected line", ->
+      goToLine.miniEditor.getModel().insertText '45:4'
+      atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
+      rowsPerPage = editor.getRowsPerPage()
+      currentRow = (editor.getCursorBufferPosition().row) - 1
+      expect(editor.getVisibleRowRange()).toEqual [
+        currentRow - Math.floor(rowsPerPage / 2) - 1, # do not include the current row
+        currentRow + Math.floor(rowsPerPage / 2)
+      ]
+
+  describe "when entering a line number greater than the number of rows in the buffer", ->
     it "moves the cursor position to the first character of the last line", ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.getModel().insertText '14'
+      goToLine.miniEditor.getModel().insertText '71'
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
-      expect(editor.getCursorBufferPosition()).toEqual [12, 0]
+      expect(editor.getCursorBufferPosition()).toEqual [70, 0]
 
   describe "when entering a column number greater than the number in the specified line", ->
     it "moves the cursor position to the last character of the specified line", ->

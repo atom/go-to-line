@@ -66,10 +66,10 @@ class GoToLineView extends View
       column = -1
 
     position = new Point(row, column)
-    editor.scrollToBufferPosition(position, center: true)
     editor.setCursorBufferPosition(position)
     if column < 0
       editor.moveToFirstCharacterOfLine()
+    editor.scrollToBufferPosition(position, center: true)
 
   storeFocusedElement: ->
     @previouslyFocusedElement = $(':focus')
