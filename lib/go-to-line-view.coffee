@@ -83,7 +83,7 @@ class GoToLineView extends View
   open: ->
     return if @panel.isVisible()
 
-    if editor = atom.workspace.getActiveTextEditor()
+    if atom.workspace.getActiveTextEditor()
       @storeFocusedElement()
       @panel.show()
       @message.text("Enter a line row:column to go to")
