@@ -79,6 +79,18 @@ describe 'GoToLine', ->
         atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
         expect(editor.getCursorBufferPosition()).toEqual [2, 4]
 
+    describe "when the line number entered is nested within foldes", ->
+      it "unfolds all folds containing the given row", ->
+        expect(editor.indentationForBufferRow(6)).toEqual 3
+        editor.foldAll()
+        expect(editor.screenRowForBufferRow(6)).toEqual 0
+
+        # buffer rows are 0-indexed whereas the gutter row numbers are 1-indexed
+        # so buffer row 6 corresponds to gutter row 7
+        goToLine.miniEditor.getModel().insertText '7'
+        atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
+        expect(editor.getCursorBufferPosition()).toEqual [6, 6]
+
   describe "when no line number has been entered", ->
     it "closes the view and does not update the cursor position", ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
