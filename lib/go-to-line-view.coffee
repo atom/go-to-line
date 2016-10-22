@@ -7,7 +7,7 @@ class GoToLineView extends View
 
   @content: ->
     @div class: 'go-to-line', =>
-      @subview 'miniEditor', new TextEditorView(mini: true, placeholderText: 'e.g: 3 for row 3, 2:7 for row 2 and column 7')
+      @subview 'miniEditor', new TextEditorView(mini: true)
       @div class: 'message', outlet: 'message'
 
   initialize: ->
