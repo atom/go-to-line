@@ -68,7 +68,7 @@ class GoToLineView extends View
     position = new Point(row, column)
     editor.scrollToBufferPosition(position, center: true)
     editor.setCursorBufferPosition(position)
-    editor.unfoldCurrentRow()
+    editor.unfoldBufferRow(row)
     if column < 0
       editor.moveToFirstCharacterOfLine()
 
