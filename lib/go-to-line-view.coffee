@@ -18,11 +18,15 @@ class GoToLineView extends View
       false
 
     @miniEditor.on 'blur', => @close()
-    atom.commands.add @miniEditor.element, 'core:confirm', => @confirm()
+    atom.commands.add @miniEditor.element, 'core:confirm', => @navigate()
     atom.commands.add @miniEditor.element, 'core:cancel', => @close()
 
     @miniEditor.getModel().onWillInsertText ({cancel, text}) ->
-      cancel() unless text.match(/[0-9:]/)
+      unless text.match(/[0-9:]/)
+        cancel()
+
+    @miniEditor.getModel().onDidChange =>
+      @navigate(keepOpen: true)
 
   toggle: ->
     if @panel.isVisible()
@@ -38,11 +42,11 @@ class GoToLineView extends View
     @panel.hide()
     @restoreFocus() if miniEditorFocused
 
-  confirm: ->
+  navigate: (options={}) ->
     lineNumber = @miniEditor.getText()
     editor = atom.workspace.getActiveTextEditor()
 
-    @close()
+    @close() unless options.keepOpen?
 
     return unless editor? and lineNumber.length
 

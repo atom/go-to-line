@@ -35,6 +35,16 @@ describe 'GoToLine', ->
       goToLine.miniEditor.getModel().insertText '4'
       expect(goToLine.miniEditor.getText()).toBe '4'
 
+  describe "when typing line numbers (auto-navigation)", ->
+    it "automatically scrolls to the desired line", ->
+      goToLine.miniEditor.getModel().insertText '13'
+      expect(editor.getCursorBufferPosition()).toEqual [12, 0]
+
+  describe "when typing line and column numbers (auto-navigation)", ->
+    it "automatically scrolls to the desired line and column", ->
+      goToLine.miniEditor.getModel().insertText '3:8'
+      expect(editor.getCursorBufferPosition()).toEqual [2, 7]
+
   describe "when entering a line number and column number", ->
     it "moves the cursor to the column number of the line specified", ->
       expect(goToLine.miniEditor.getText()).toBe ''
