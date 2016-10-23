@@ -18,11 +18,13 @@ class GoToLineView extends View
       false
 
     @miniEditor.on 'blur', => @close()
-    atom.commands.add @miniEditor.element, 'core:confirm', => @confirm()
-    atom.commands.add @miniEditor.element, 'core:cancel', => @close()
+    atom.commands.add @miniEditor.element, 'core:confirm', => @close()
+    atom.commands.add @miniEditor.element, 'core:cancel', => @cancel()
 
     @miniEditor.getModel().onWillInsertText ({cancel, text}) ->
       cancel() unless text.match(/[0-9:]/)
+
+    @miniEditor.getModel().onDidStopChanging => @navigate()
 
   toggle: ->
     if @panel.isVisible()
@@ -38,11 +40,9 @@ class GoToLineView extends View
     @panel.hide()
     @restoreFocus() if miniEditorFocused
 
-  confirm: ->
+  navigate: ->
     lineNumber = @miniEditor.getText()
     editor = atom.workspace.getActiveTextEditor()
-
-    @close()
 
     return unless editor? and lineNumber.length
 
@@ -65,7 +65,16 @@ class GoToLineView extends View
       # of the specified line.
       column = -1
 
+    @navigateTo(row, column)
+
+  # Cancel navigation and go back to the initial position
+  cancel: ->
+    @close()
+    @navigateTo(@initialRow, @initialColumn)
+
+  navigateTo: (row, column) ->
     position = new Point(row, column)
+    editor = atom.workspace.getActiveTextEditor()
     editor.setCursorBufferPosition(position)
     editor.unfoldBufferRow(row)
     if column < 0
@@ -89,3 +98,5 @@ class GoToLineView extends View
       @panel.show()
       @message.text("Enter a <row> or <row>:<column> to go there. Examples: \"3\" for row 3 or \"2:7\" for row 2 and column 7")
       @miniEditor.focus()
+      editor = atom.workspace.getActiveTextEditor()
+      {row: @initialRow, column: @initialColumn} = editor.getCursorBufferPosition()
