@@ -22,7 +22,7 @@ class GoToLineView extends View
     atom.commands.add @miniEditor.element, 'core:cancel', => @close()
 
     @miniEditor.getModel().onWillInsertText ({cancel, text}) ->
-      cancel() unless text.match(/[0-9:]/)
+      cancel() if text.match(/[^0-9:]/)
 
   toggle: ->
     if @panel.isVisible()
