@@ -29,6 +29,8 @@ describe 'GoToLine', ->
       expect(goToLine.miniEditor.getText()).toBe ''
       goToLine.miniEditor.getModel().insertText 'a'
       expect(goToLine.miniEditor.getText()).toBe ''
+      goToLine.miniEditor.getModel().insertText 'path/file.txt:56'
+      expect(goToLine.miniEditor.getText()).toBe ''
       goToLine.miniEditor.getModel().insertText ':'
       expect(goToLine.miniEditor.getText()).toBe ':'
       goToLine.miniEditor.getModel().setText ''
