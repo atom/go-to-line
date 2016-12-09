@@ -1,27 +1,30 @@
-{Point} = require 'atom'
-{$, TextEditorView, View}  = require 'atom-space-pen-views'
+{Point, TextEditor} = require 'atom'
 
 module.exports =
-class GoToLineView extends View
+class GoToLineView
   @activate: -> new GoToLineView
 
-  @content: ->
-    @div class: 'go-to-line', =>
-      @subview 'miniEditor', new TextEditorView(mini: true)
-      @div class: 'message', outlet: 'message'
+  constructor: ->
+    @element = document.createElement('div')
+    @element.classList.add('go-to-line')
 
-  initialize: ->
-    @panel = atom.workspace.addModalPanel(item: this, visible: false)
+    @miniEditor = new TextEditor
+    @miniEditor.element.addEventListener('blur', @close.bind(this))
+    @element.appendChild(@miniEditor.element)
+
+    @message = document.createElement('div')
+    @message.classList.add('message')
+    @element.appendChild(@message)
+
+    atom.commands.add @miniEditor.element, 'core:confirm', => @confirm()
+    atom.commands.add @miniEditor.element, 'core:cancel', => @close()
+    @panel = atom.workspace.addModalPanel(item: @element, visible: false)
 
     atom.commands.add 'atom-text-editor', 'go-to-line:toggle', =>
       @toggle()
       false
 
-    @miniEditor.on 'blur', => @close()
-    atom.commands.add @miniEditor.element, 'core:confirm', => @confirm()
-    atom.commands.add @miniEditor.element, 'core:cancel', => @close()
-
-    @miniEditor.getModel().onWillInsertText ({cancel, text}) ->
+    @miniEditor.onWillInsertText ({cancel, text}) ->
       cancel() if text.match(/[^0-9:]/)
 
   toggle: ->
@@ -33,7 +36,7 @@ class GoToLineView extends View
   close: ->
     return unless @panel.isVisible()
 
-    miniEditorFocused = @miniEditor.hasFocus()
+    miniEditorFocused = @miniEditor.element.hasFocus()
     @miniEditor.setText('')
     @panel.hide()
     @restoreFocus() if miniEditorFocused
@@ -73,10 +76,10 @@ class GoToLineView extends View
     editor.scrollToBufferPosition(position, center: true)
 
   storeFocusedElement: ->
-    @previouslyFocusedElement = $(':focus')
+    @previouslyFocusedElement = document.activeElement
 
   restoreFocus: ->
-    if @previouslyFocusedElement?.isOnDom()
+    if @previouslyFocusedElement?.parentElement
       @previouslyFocusedElement.focus()
     else
       atom.views.getView(atom.workspace).focus()
@@ -87,5 +90,5 @@ class GoToLineView extends View
     if atom.workspace.getActiveTextEditor()
       @storeFocusedElement()
       @panel.show()
-      @message.text("Enter a <row> or <row>:<column> to go there. Examples: \"3\" for row 3 or \"2:7\" for row 2 and column 7")
-      @miniEditor.focus()
+      @message.textContent = "Enter a <row> or <row>:<column> to go there. Examples: \"3\" for row 3 or \"2:7\" for row 2 and column 7"
+      @miniEditor.element.focus()
