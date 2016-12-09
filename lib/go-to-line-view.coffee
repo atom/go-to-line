@@ -8,7 +8,7 @@ class GoToLineView
     @element = document.createElement('div')
     @element.classList.add('go-to-line')
 
-    @miniEditor = new TextEditor
+    @miniEditor = new TextEditor({mini: true})
     @miniEditor.element.addEventListener('blur', @close.bind(this))
     @element.appendChild(@miniEditor.element)
 
