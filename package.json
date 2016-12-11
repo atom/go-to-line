@@ -1,22 +1,31 @@
 {
   "name": "go-to-line",
   "version": "0.31.2",
-  "main": "./lib/go-to-line-view",
+  "main": "./lib/go-to-line-view.js",
   "description": "Jump to a specific editor line number with `ctrl-g`.",
   "license": "MIT",
+  "scripts": {
+    "lint": "standard"
+  },
   "activationCommands": {
     "atom-text-editor": [
       "go-to-line:toggle"
     ]
   },
   "repository": "https://github.com/atom/go-to-line",
-  "dependencies": {
-    "atom-space-pen-views": "^2.0.0"
-  },
   "engines": {
     "atom": "*"
   },
   "devDependencies": {
-    "coffeelint": "^1.9.7"
+    "standard": "^8.6.0"
+  },
+  "standard": {
+    "globals": [
+      "atom",
+      "waitsForPromise"
+    ],
+    "ignore": [
+      "spec/fixtures"
+    ]
   }
 }
