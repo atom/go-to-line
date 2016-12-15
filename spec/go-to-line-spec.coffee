@@ -27,25 +27,25 @@ describe 'GoToLine', ->
   describe "when entering a line number", ->
     it "only allows 0-9 and the colon character to be entered in the mini editor", ->
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.getModel().insertText 'a'
+      goToLine.miniEditor.insertText 'a'
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.getModel().insertText 'path/file.txt:56'
+      goToLine.miniEditor.insertText 'path/file.txt:56'
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.getModel().insertText ':'
+      goToLine.miniEditor.insertText ':'
       expect(goToLine.miniEditor.getText()).toBe ':'
-      goToLine.miniEditor.getModel().setText ''
-      goToLine.miniEditor.getModel().insertText '4'
+      goToLine.miniEditor.setText ''
+      goToLine.miniEditor.insertText '4'
       expect(goToLine.miniEditor.getText()).toBe '4'
 
   describe "when entering a line number and column number", ->
     it "moves the cursor to the column number of the line specified", ->
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.getModel().insertText '3:14'
+      goToLine.miniEditor.insertText '3:14'
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(editor.getCursorBufferPosition()).toEqual [2, 13]
 
     it "centers the selected line", ->
-      goToLine.miniEditor.getModel().insertText '45:4'
+      goToLine.miniEditor.insertText '45:4'
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       rowsPerPage = editor.getRowsPerPage()
       currentRow = (editor.getCursorBufferPosition().row) - 1
@@ -59,7 +59,7 @@ describe 'GoToLine', ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.getModel().insertText '71'
+      goToLine.miniEditor.insertText '71'
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [70, 0]
@@ -69,7 +69,7 @@ describe 'GoToLine', ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
       expect(goToLine.miniEditor.getText()).toBe ''
-      goToLine.miniEditor.getModel().insertText '3:43'
+      goToLine.miniEditor.insertText '3:43'
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [2, 40]
@@ -77,7 +77,7 @@ describe 'GoToLine', ->
   describe "when core:confirm is triggered", ->
     describe "when a line number has been entered", ->
       it "moves the cursor to the first character of the line", ->
-        goToLine.miniEditor.getModel().insertText '3'
+        goToLine.miniEditor.insertText '3'
         atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
         expect(editor.getCursorBufferPosition()).toEqual [2, 4]
 
@@ -89,7 +89,7 @@ describe 'GoToLine', ->
 
         # buffer rows are 0-indexed whereas the gutter row numbers are 1-indexed
         # so buffer row 6 corresponds to gutter row 7
-        goToLine.miniEditor.getModel().insertText '7'
+        goToLine.miniEditor.insertText '7'
         atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
         expect(editor.getCursorBufferPosition()).toEqual [6, 6]
 
@@ -105,13 +105,13 @@ describe 'GoToLine', ->
     it "navigates to the column of the current line", ->
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
-      goToLine.miniEditor.getModel().insertText '4:1'
+      goToLine.miniEditor.insertText '4:1'
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [3, 0]
       atom.commands.dispatch editorView, 'go-to-line:toggle'
       expect(goToLine.panel.isVisible()).toBeTruthy()
-      goToLine.miniEditor.getModel().insertText ':19'
+      goToLine.miniEditor.insertText ':19'
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(goToLine.panel.isVisible()).toBeFalsy()
       expect(editor.getCursorBufferPosition()).toEqual [3, 18]
