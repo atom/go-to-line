@@ -61,8 +61,9 @@ describe('GoToLine', () => {
       goToLine.miniEditor.insertText('45:4')
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       const rowsPerPage = editor.getRowsPerPage()
-      const currentRow = (editor.getCursorBufferPosition().row) - 1
-      expect(editor.getVisibleRowRange()).toEqual([currentRow - Math.floor(rowsPerPage / 2) - 1, currentRow + Math.floor(rowsPerPage / 2)])
+      const currentRow = editor.getCursorBufferPosition().row - 1
+      expect(editor.getFirstVisibleScreenRow()).toBe(currentRow - Math.ceil(rowsPerPage / 2))
+      expect(editor.getLastVisibleScreenRow()).toBe(currentRow + Math.floor(rowsPerPage / 2))
     })
   })
 
