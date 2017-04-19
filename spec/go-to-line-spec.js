@@ -17,7 +17,7 @@ describe('GoToLine', () => {
     runs(() => {
       const workspaceElement = atom.views.getView(atom.workspace)
       workspaceElement.style.height = '200px'
-      workspaceElement.style.widht = '1000px'
+      workspaceElement.style.width = '1000px'
       jasmine.attachToDOM(workspaceElement)
       editor = atom.workspace.getActiveTextEditor()
       editorView = atom.views.getView(editor)
@@ -56,17 +56,19 @@ describe('GoToLine', () => {
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       expect(editor.getCursorBufferPosition()).toEqual([2, 13])
     })
-    return it('centers the selected line', () => {
+
+    it('centers the selected line', () => {
       goToLine.miniEditor.insertText('45:4')
       atom.commands.dispatch(goToLine.miniEditor.element, 'core:confirm')
       const rowsPerPage = editor.getRowsPerPage()
-      const currentRow = (editor.getCursorBufferPosition().row) - 1
-      expect(editor.getVisibleRowRange()).toEqual([currentRow - Math.floor(rowsPerPage / 2) - 1, currentRow + Math.floor(rowsPerPage / 2)])
+      const currentRow = editor.getCursorBufferPosition().row - 1
+      expect(editor.getFirstVisibleScreenRow()).toBe(currentRow - Math.ceil(rowsPerPage / 2))
+      expect(editor.getLastVisibleScreenRow()).toBe(currentRow + Math.floor(rowsPerPage / 2))
     })
   })
 
   describe('when entering a line number greater than the number of rows in the buffer', () => {
-    return it('moves the cursor position to the first character of the last line', () => {
+    it('moves the cursor position to the first character of the last line', () => {
       atom.commands.dispatch(editorView, 'go-to-line:toggle')
       expect(goToLine.panel.isVisible()).toBeTruthy()
       expect(goToLine.miniEditor.getText()).toBe('')
@@ -97,6 +99,7 @@ describe('GoToLine', () => {
         expect(editor.getCursorBufferPosition()).toEqual([2, 4])
       })
     })
+
     describe('when the line number entered is nested within foldes', () => {
       it('unfolds all folds containing the given row', () => {
         expect(editor.indentationForBufferRow(6)).toEqual(3)
@@ -135,6 +138,7 @@ describe('GoToLine', () => {
       expect(editor.getCursorBufferPosition()).toEqual([3, 18])
     })
   })
+
   describe('when core:cancel is triggered', () => {
     it('closes the view and does not update the cursor position', () => {
       atom.commands.dispatch(editorView, 'go-to-line:toggle')
