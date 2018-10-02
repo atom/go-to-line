@@ -1,4 +1,7 @@
-'.platform-darwin, .platform-win32, .platform-linux':
+'.platform-darwin':
+  'cmd-g': 'go-to-line:toggle'
+
+'.platform-win32, .platform-linux':
   'ctrl-g': 'go-to-line:toggle'
 
 '.go-to-line atom-text-editor[mini]':
