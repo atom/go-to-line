@@ -1,3 +1,7 @@
+### This package is now a part of the [core Atom repository](https://github.com/atom/atom/tree/master/packages/go-to-line), please direct all issues and pull requests there in the future!
+
+---
+
 # Go To Line package
 [![OS X Build Status](https://travis-ci.org/atom/go-to-line.svg?branch=master)](https://travis-ci.org/atom/go-to-line) [![Windows Build Status](https://ci.appveyor.com/api/projects/status/qf0isc8ulw4wxi0b/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/go-to-line/branch/master) [![Dependency Status](https://david-dm.org/atom/go-to-line.svg)](https://david-dm.org/atom/go-to-line)
 
